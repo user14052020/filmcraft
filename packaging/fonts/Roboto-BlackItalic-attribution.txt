@@ -1,0 +1,9 @@
+asset:        Roboto-BlackItalic.ttf
+title:        Roboto Black Italic (static, Cyrillic/Latin/Greek)
+author:       Google Inc.; Christian Robertson
+source:       https://github.com/googlefonts/roboto-2/blob/38062f4b4a0be4346d07a928408da21602545e9e/src/hinted/Roboto-BlackItalic.ttf
+license:      Apache-2.0
+license-file: LICENSE.txt
+added:        2026-10-14 by FilmCraft local contributor
+notes:        Unmodified official static hinted font; copyright 2015 Google Inc. All Rights Reserved.
+sha256:       5ac072b1f16adecb9ab44891f756bd689b5760a02c0c1b14f9b7afe2f68ebbe9

@@ -1,0 +1,111 @@
+FilmCraft 0.7.2-iphone-hdr.9 — local iPhone HDR / Dolby Vision changes
+
+Prepare external fonts on a new checkout (downloads fonts, does not build):
+  bash packaging/macos/prepare-iphone-fonts.sh
+Build on an Apple-silicon Mac:
+  bash packaging/macos/build-iphone-hdr.sh
+Build and replace the installed app (previous app moves to Trash):
+  bash packaging/macos/build-iphone-hdr.sh --install
+
+Changes:
+- Publication: independent fork identity replaces upstream trademark artwork;
+  source/issues links point to user14052020/filmcraft. Upstream copyright remains.
+- A pinned, SHA-256-verified preparation script installs Roboto into the external
+  craft-fonts checkout so a new Mac can reproduce the font setup. No font binary
+  or Whisper weights are committed. GitHub workflows run only when requested manually.
+- HDR caption lettering now has its own white level, defaulting to 1000 nits
+  instead of the scene's 203-nit diffuse reference white. This is an intentional
+  brighter graphics style, not a change to HLG/PQ transfer functions or footage.
+  HDR white in the Text panel adjusts it from 100 to 1000 nits; SDR output is
+  unchanged. Older saved tracks without the field also receive the new default.
+  Only letter-fill RGB is scaled; alpha, outlines, shadows and boxes are not.
+  Native EDR preview uses the same level, capped to the current display headroom.
+- Timeline marquee selection includes caption blocks together with video/audio.
+  Dragging the body of any selected clip or caption moves the captured selection
+  with one shared offset and one undo step, with matching live previews. Shift
+  adds to the selection; Escape restores both selections/cancels the drag.
+  Caption neighbours, locked tracks and sequence bounds cannot silently make
+  captions drift from their media. Copying duplicates captions too; insert edits
+  keep selected captions from receiving a second ripple shift. Invalid target
+  overlaps fail atomically instead of partially moving the selection.
+- New caption tracks default to Roboto Black Italic (Cyrillic included), opaque
+  white text, a 3px black outline and solid offset extrusion (-4,+5px at 1080
+  lines), without a rectangular box. This is a close match to the supplied
+  reference, not a definitive identification of its original font.
+  The Reference style button applies this typography to an existing track while
+  keeping its size and placement. Family, face, Box, outline and 3D shadow remain
+  editable independently. Older saved styles retain their previous face/effects.
+- Vertical caption placement has a numeric percentage next to Top/Middle/Bottom:
+  0/50/100 move between the safe top/centre/bottom positions. Manual positions
+  override imported cue placement; untouched old projects keep anchor/VTT rules.
+- EDR preview adds captions after HDR display tone mapping, preserving graphics
+  white instead of dimming it with the footage. HDR export uses the track's chosen
+  text white level and transforms caption colours from BT.709 to the working gamut.
+- The local build embeds the downloaded static font through the sibling
+  craft-fonts checkout (or CRAFT_FONTS_DIR). Keep that folder next to FilmCraft-STT.
+  Roboto's Apache-2.0 licence and attribution are copied into the app bundle.
+- Export defaults to Burn Captions Into Video when the sequence has a caption
+  track, including Quick Export and queue commands using built-in presets.
+  Manual caption choices survive subsequent draws and format changes. Saved
+  user presets and sidecar choices keep their explicit caption settings.
+- Caption styling includes a Black outline checkbox, using the existing glyph
+  outline renderer (3 pixels at 1080-line height) in preview and caption burn-in.
+  Box and outline can be toggled independently. Style controls use two wrapping
+  rows so the new option is accessible in a narrow Text panel.
+- Transcript-generated captions always stop at sentence boundaries, even below
+  the selected maximum word count. Periods, ellipses, question/exclamation marks
+  and closing quotes are handled before display punctuation is removed.
+- Generated caption text is Unicode uppercase with Unicode punctuation removed.
+  Punctuation-only tokens do not count as words. The original transcript and
+  manually edited caption text are preserved.
+- Create Captions from Transcript opens an options dialog: maximum words per
+  line (1-100) and lines per caption (1 or 2), defaulting to 3 words and 1 line.
+  Successful choices are remembered. Limits also apply to Russian and to
+  manually corrected multiword transcript entries, using their existing timing.
+  Creation makes a new track; earlier caption tracks remain intact.
+- Caption start/end fields retain edits on blur. Apply or Enter saves both
+  boundaries in one undoable change; Cancel or Escape discards the draft.
+  Invalid timecode or overlaps show an error without discarding the input.
+  Timecode format is HH:MM:SS:FF, with frames in the final field.
+- The first movie in an empty default-size sequence sets the canvas to its
+  displayed dimensions and pixel aspect, including iPhone portrait rotation.
+  An otherwise untouched sequence also adopts the source frame rate before
+  placement/time snapping; existing audio edits keep their timebase.
+- New Sequence from a subclip inherits its original media dimensions and rate;
+  placement uses the subclip's original source size for its anchor point.
+- For an existing landscape edit of portrait video, select its video clip and
+  use Sequence > Match Frame Size to Source (Размер кадра по исходнику).
+  This moves the canvas centre without shrinking Motion scale or changing clip
+  timing. It is undoable and keeps the sequence HDR/color settings. A previous
+  manual export size is reset to Match Source; encoding settings are retained.
+  Custom zoom, crop effects and animation are retained, not automatically reset.
+- macOS native floating-point EDR surface and direct HDR Source/Program presentation.
+- Automatic HDR source detection and display headroom adaptation.
+- HDR preview reads originals without the SDR proxy/preview cache.
+- A sequence created from HLG/PQ media inherits its HDR working space; the first
+  HDR clip placed in an empty default Rec.709 sequence also enables HDR.
+  Existing edited sequences and explicitly selected working spaces are preserved.
+- Initial export preset for HLG sequences is Dolby Vision Profile 8.4 HEVC Main10;
+  PQ uses standard HDR10 HEVC. Both keep source dimensions and frame rate.
+- Dolby Vision metadata is regenerated by Apple VideoToolbox from edited frames.
+  The encoder must supply a real profile 8.4 dvvC record, otherwise export fails.
+- Source ambient-viewing metadata (amve) is preserved. Mixed conflicting known
+  environments produce an explicit error; files with no amve use 314 lux D65.
+- Dolby Vision export needs supported Apple hardware and macOS 12 or later.
+  Hardware/profile failures never silently deliver SDR or plain HLG.
+- GUI and CLI both retain Whisper. Existing model and language preferences
+  remain in the existing FilmCraft application-support directory.
+
+Limits:
+- iPhone HLG-compatible Dolby Vision footage uses its HLG base layer while editing.
+  Export generates new Dolby Vision metadata appropriate to the final frames;
+  it does not copy original camera metadata onto edited pictures.
+- Edited video is encoded again; the export is not a bit-identical copy.
+- HDR float composition currently uses the CPU and may be slower than SDR.
+- Compare/channel views remain SDR, as do PNG screenshots.
+- Earlier HDR components were compiled during development. The Dolby Vision
+  portrait and caption changes and the complete merged app have not been compiled or
+  tested, at the user's request.
+
+The original video files, projects, preferences and downloaded speech models
+are not modified by the build/install script.
