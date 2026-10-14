@@ -1,4 +1,4 @@
-FilmCraft 0.7.2-iphone-hdr.9 — local iPhone HDR / Dolby Vision changes
+FilmCraft 0.7.2-iphone-hdr.10 — local iPhone HDR / Dolby Vision changes
 
 Prepare external fonts on a new checkout (downloads fonts, does not build):
   bash packaging/macos/prepare-iphone-fonts.sh
@@ -13,13 +13,12 @@ Changes:
 - A pinned, SHA-256-verified preparation script installs Roboto into the external
   craft-fonts checkout so a new Mac can reproduce the font setup. No font binary
   or Whisper weights are committed. GitHub workflows run only when requested manually.
-- HDR caption lettering now has its own white level, defaulting to 1000 nits
-  instead of the scene's 203-nit diffuse reference white. This is an intentional
-  brighter graphics style, not a change to HLG/PQ transfer functions or footage.
-  HDR white in the Text panel adjusts it from 100 to 1000 nits; SDR output is
-  unchanged. Older saved tracks without the field also receive the new default.
+- HDR caption lettering always uses the 1000-nit mastering peak for white.
+  The separate HDR white control, command parameter and saved style field are
+  removed. Old saved per-track values are ignored, so older projects use the
+  same maximum brightness. Footage and SDR caption rendering are unchanged.
   Only letter-fill RGB is scaled; alpha, outlines, shadows and boxes are not.
-  Native EDR preview uses the same level, capped to the current display headroom.
+  Native EDR preview caps this peak to the current display headroom.
 - Timeline marquee selection includes caption blocks together with video/audio.
   Dragging the body of any selected clip or caption moves the captured selection
   with one shared offset and one undo step, with matching live previews. Shift
@@ -39,7 +38,7 @@ Changes:
   0/50/100 move between the safe top/centre/bottom positions. Manual positions
   override imported cue placement; untouched old projects keep anchor/VTT rules.
 - EDR preview adds captions after HDR display tone mapping, preserving graphics
-  white instead of dimming it with the footage. HDR export uses the track's chosen
+  white instead of dimming it with the footage. HDR export uses the fixed 1000-nit
   text white level and transforms caption colours from BT.709 to the working gamut.
 - The local build embeds the downloaded static font through the sibling
   craft-fonts checkout (or CRAFT_FONTS_DIR). Keep that folder next to FilmCraft-STT.

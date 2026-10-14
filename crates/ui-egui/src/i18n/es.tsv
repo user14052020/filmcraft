@@ -3613,9 +3613,6 @@
 	Apply Roboto Black Italic, white letters, black outline and 3D shadow to this track.	Aplicar Roboto Black Italic, letras blancas, contorno negro y sombra 3D a esta pista.
 	Vertical position: 0% top, 50% centre, 100% bottom, inside the safe margins. Click the number to type a value.	Posición vertical: 0% arriba, 50% centro, 100% abajo, dentro de los márgenes seguros. Haz clic en el número para escribir un valor.
 
-	HDR white	Blanco HDR
-	 nits	 nits
-	HDR letter brightness: 1000 nits for bright white, 203 nits for standard reference white. Does not change the video or SDR exports.	Brillo de las letras HDR: 1000 nits para blanco brillante, 203 nits para blanco de referencia. No cambia el vídeo ni las exportaciones SDR.
 
 	Independent iPhone HDR fork, based on FilmCraft by the ArtCraft team and contributors.	Versión independiente para iPhone HDR, basada en FilmCraft del equipo ArtCraft y sus colaboradores.
 	Upstream community on Discord	Comunidad del proyecto original en Discord

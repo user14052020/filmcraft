@@ -705,7 +705,7 @@ pub fn render_item_edr(project: &Project, item: ItemId, t: Tick, scale: f32, hea
         }
     };
     colorman::to_extended_display(&mut img, &pipe, headroom);
-    // Tone-map the picture first, then show the selected HDR graphics white up to the
+    // Tone-map the picture first, then show peak HDR graphics white up to the
     // available display headroom. A screen at SDR headroom still shows white as white.
     if captions && let ItemKind::Sequence(seq) = &pi.kind {
         let overlays = if seq.settings.color.working.is_hdr() {

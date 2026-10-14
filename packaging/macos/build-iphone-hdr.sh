@@ -14,7 +14,7 @@ if [ "$(uname -s)" != Darwin ] || [ "$(uname -m)" != arm64 ]; then
   exit 1
 fi
 
-export FILMCRAFT_VERSION=0.7.2-iphone-hdr.9
+export FILMCRAFT_VERSION=0.7.2-iphone-hdr.10
 . "$(dirname "${BASH_SOURCE[0]}")/../env.sh"
 export CRAFT_FONTS_DIR="${CRAFT_FONTS_DIR:-$ROOT/../craft-fonts}"
 export CRAFT_FONTS_REQUIRED=1
@@ -51,9 +51,9 @@ copy_font_licences "$APP/Contents/Resources/Licenses"
 cp "$CRAFT_FONTS_DIR/fonts/roboto/LICENSE.txt" "$APP/Contents/Resources/Licenses/LICENSE-Roboto.txt"
 cp "$CRAFT_FONTS_DIR/fonts/roboto/Roboto-BlackItalic.ttf.attribution" "$APP/Contents/Resources/Licenses/Roboto-BlackItalic.attribution"
 sed -e "s/@VERSION@/$VERSION/g" -e 's/@SHORT_VERSION@/0.7.2/g' \
-  -e "s/@BUILD_SHA@/$FILMCRAFT_BUILD_SHA-iphone-hdr.9/g" \
+  -e "s/@BUILD_SHA@/$FILMCRAFT_BUILD_SHA-iphone-hdr.10/g" \
   "$ROOT/packaging/macos/Info.plist.in" > "$APP/Contents/Info.plist"
-/usr/libexec/PlistBuddy -c 'Set :CFBundleVersion 0.7.2.9' "$APP/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c 'Set :CFBundleVersion 0.7.2.10' "$APP/Contents/Info.plist"
 printf 'APPL????' > "$APP/Contents/PkgInfo"
 codesign --force --sign - --timestamp=none --options runtime \
   --entitlements "$ROOT/packaging/macos/entitlements.plist" "$APP/Contents/MacOS/FilmCraft"

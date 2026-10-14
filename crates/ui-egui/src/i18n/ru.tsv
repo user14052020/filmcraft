@@ -382,9 +382,6 @@
 	Apply Roboto Black Italic, white letters, black outline and 3D shadow to this track.	Применить Roboto Black Italic, белый цвет букв, чёрную обводку и объёмную тень ко всей дорожке.
 	Vertical position: 0% top, 50% centre, 100% bottom, inside the safe margins. Click the number to type a value.	Положение по вертикали: 0% — верх, 50% — центр, 100% — низ, с учётом отступов от края. Нажмите на число, чтобы ввести значение.
 
-	HDR white	Белый HDR
-	 nits	 нит
-	HDR letter brightness: 1000 nits for bright white, 203 nits for standard reference white. Does not change the video or SDR exports.	Яркость букв в HDR: 1000 нит — яркий белый, 203 нит — стандартный опорный белый. Не меняет видео и экспорт SDR.
 
 	Independent iPhone HDR fork, based on FilmCraft by the ArtCraft team and contributors.	Независимая версия для iPhone HDR на основе FilmCraft команды ArtCraft и участников проекта.
 	Upstream community on Discord	Сообщество исходного проекта в Discord

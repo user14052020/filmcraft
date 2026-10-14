@@ -466,7 +466,6 @@ fn filmcraft_speech_available(app: &FilmcraftApp) -> bool {
 fn style_strip(app: &mut FilmcraftApp, ui: &mut egui::Ui, r: Rect, track_idx: usize, actions: &mut Vec<(String, Value)>) {
     let Some(tr) = app.session.active_sequence().and_then(|q| q.caption_tracks.get(track_idx)).cloned() else { return };
     let st = tr.style.clone();
-    let hdr = app.session.active_sequence().is_some_and(|q| q.settings.color.working.is_hdr());
     let mut child = ui.new_child(egui::UiBuilder::new().max_rect(r).id_salt(("caption-style", tr.id.0)));
     egui::ScrollArea::vertical().id_salt("caption-style-scroll").max_height(r.height().max(0.0)).show(&mut child, |ui| {
         ui.horizontal_wrapped(|ui| {
@@ -512,17 +511,6 @@ fn style_strip(app: &mut FilmcraftApp, ui: &mut egui::Ui, r: Rect, track_idx: us
             if resp.changed() {
                 actions.push(("captions.setStyle".into(), json!({"track": tr.id.0, "color": col.to_srgba_unmultiplied()})));
             }
-            if hdr {
-                ui.label(egui::RichText::new(tl!("HDR white")).size(11.0).color(app.tokens.text_dim));
-                let mut nits = if st.hdr_white_nits.is_finite() { st.hdr_white_nits.clamp(100.0, 1000.0) } else { 1000.0 };
-                let resp = ui.add(crate::widgets::number_drag(&mut nits).range(100.0..=1000.0).speed(10.0).suffix(tl!(" nits")))
-                    .on_hover_text(tl!("HDR letter brightness: 1000 nits for bright white, 203 nits for standard reference white. Does not change the video or SDR exports."));
-                app.auto.add("text.captions.style.hdrWhiteNits", resp.rect, "HDR caption white (nits)");
-                let escaped = resp.drag_stopped() && ui.input(|i| i.key_pressed(egui::Key::Escape));
-                if !escaped && (resp.drag_stopped() || (resp.changed() && !resp.dragged())) {
-                    actions.push(("captions.setStyle".into(), json!({"track": tr.id.0, "hdrWhiteNits": nits})));
-                }
-            }
         });
         ui.horizontal_wrapped(|ui| {
             ui.spacing_mut().item_spacing.x = 6.0;
@@ -555,7 +543,7 @@ fn style_strip(app: &mut FilmcraftApp, ui: &mut egui::Ui, r: Rect, track_idx: us
             app.auto.add("text.captions.style.reference", resp.rect, "Apply reference caption style");
             if resp.clicked() {
                 actions.push(("captions.setStyle".into(), json!({
-                    "track": tr.id.0, "font": "Roboto", "fontStyle": "Black Italic", "color": [255, 255, 255, 255], "hdrWhiteNits": 1000.0,
+                    "track": tr.id.0, "font": "Roboto", "fontStyle": "Black Italic", "color": [255, 255, 255, 255],
                     "background": false, "outline": 3.0, "outlineColor": [0, 0, 0, 255],
                     "shadow": true, "shadowOffset": [-4.0, 5.0], "shadowColor": [0, 0, 0, 255]
                 })));

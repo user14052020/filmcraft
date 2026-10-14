@@ -309,17 +309,17 @@ pub fn sequence_overlays(seq: &Sequence, t: Tick, w: usize, h: usize) -> Vec<Ove
     seq.caption_tracks.iter().rev().filter_map(|tr| track_overlay(tr, t, w, h)).collect()
 }
 
-/// HDR text brightness is per track and never changes the footage. `max_gain` is the screen's
-/// current EDR headroom for preview, or the mastering peak / reference white for HDR export.
+/// HDR lettering always uses the mastering peak as graphics white (1000 nits).
+/// `max_gain` caps preview to the screen's current EDR headroom; HDR export uses the full peak.
+/// Older per-track brightness values are no longer read, so saved projects use the same white.
 pub fn sequence_overlays_hdr(seq: &Sequence, t: Tick, w: usize, h: usize, max_gain: f32) -> Vec<Overlay> {
     let max_gain = bounded(max_gain, 1.0, 1.0, 64.0);
+    let gain = ((filmcraft_color::transform::HDR_PEAK_NITS / filmcraft_color::REFERENCE_WHITE_NITS) as f32).min(max_gain);
     seq.caption_tracks.iter().rev().filter_map(|tr| {
         if !tr.enabled {
             return None;
         }
         let caption = tr.caption_at(t)?;
-        let nits = bounded(tr.style.hdr_white_nits, 1000.0, 100.0, 1000.0);
-        let gain = (nits / filmcraft_color::REFERENCE_WHITE_NITS as f32).min(max_gain);
         render_caption_with_white(caption, &tr.style, w, h, gain)
     }).collect()
 }

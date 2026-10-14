@@ -83,9 +83,6 @@ pub struct CaptionStyle {
     pub size: f32,
     /// Text colour, sRGB + alpha.
     pub color: [u8; 4],
-    /// Luminance of white lettering in HDR only, in cd/m². Unlike diffuse scene white,
-    /// caption white defaults to the 1000-nit mastering peak for a bright graphic appearance.
-    pub hdr_white_nits: f32,
     /// Draw a background box behind each line.
     pub background: bool,
     /// Background box colour, sRGB + alpha.
@@ -121,7 +118,6 @@ impl Default for CaptionStyle {
             font_style: "Black Italic".into(),
             size: 54.0,
             color: [255, 255, 255, 255],
-            hdr_white_nits: 1000.0,
             background: false,
             background_color: [0, 0, 0, 191],
             align: CaptionAlign::Center,

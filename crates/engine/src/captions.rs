@@ -200,7 +200,6 @@ fn track_json(s: &Session, t: &CaptionTrack, index: usize) -> Value {
         "syncLock": t.sync_lock,
         "style": {
             "font": t.style.font, "fontStyle": t.style.font_style, "size": t.style.size, "color": hex(t.style.color),
-            "hdrWhiteNits": t.style.hdr_white_nits,
             "background": t.style.background, "backgroundColor": hex(t.style.background_color),
             "align": format!("{:?}", t.style.align).to_lowercase(), "anchor": format!("{:?}", t.style.anchor).to_lowercase(),
             "margin": t.style.margin, "lineSpacing": t.style.line_spacing, "outline": t.style.outline, "outlineColor": hex(t.style.outline_color),
@@ -310,7 +309,7 @@ pub fn commands() -> Vec<CommandSpec> {
             "Caption Track Style",
             &[],
             None,
-            r##"{"track":id|"C1","font":str?,"fontStyle":str?,"size":f32?,"color":"#rrggbb[aa]"?,"hdrWhiteNits":100..1000?,"background":bool?,"backgroundColor":"#rrggbbaa"?,"align":"left|center|right"?,"anchor":"top|middle|bottom"?,"positionY":0..100|null?,"margin":0..0.45 (fraction of frame height)?,"lineSpacing":f32?,"outline":f32?,"outlineColor":str?,"shadow":bool?,"shadowOffset":[x,y] (-40..40 pixels at 1080 lines)?,"shadowColor":str?,"reset":bool?}"##,
+            r##"{"track":id|"C1","font":str?,"fontStyle":str?,"size":f32?,"color":"#rrggbb[aa]"?,"background":bool?,"backgroundColor":"#rrggbbaa"?,"align":"left|center|right"?,"anchor":"top|middle|bottom"?,"positionY":0..100|null?,"margin":0..0.45 (fraction of frame height)?,"lineSpacing":f32?,"outline":f32?,"outlineColor":str?,"shadow":bool?,"shadowOffset":[x,y] (-40..40 pixels at 1080 lines)?,"shadowColor":str?,"reset":bool?}"##,
             has_caption_track,
             |s, p| {
                 let tid = track_param(s, p).ok_or_else(|| bad("captions.setStyle", "no such caption track"))?;
@@ -333,10 +332,6 @@ pub fn commands() -> Vec<CommandSpec> {
                     }
                     if let Some(c) = p.get("color").and_then(parse_color) {
                         y.color = c;
-                    }
-                    if let Some(v) = p.get("hdrWhiteNits") {
-                        y.hdr_white_nits = v.as_f64().filter(|v| v.is_finite() && (100.0..=1000.0).contains(v))
-                            .ok_or_else(|| bad("captions.setStyle", "hdrWhiteNits must be in 100..1000"))? as f32;
                     }
                     if let Some(b) = bool_p(&p, "background") {
                         y.background = b;
